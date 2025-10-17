@@ -1,5 +1,4 @@
-import { PrismaService } from '../prisma/prisma.service';
-
+import { PrismaService } from '../../database/prisma.service';
 
 export interface IBaseRepository<T> {
   create(data: any): Promise<T>;

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Movie, Prisma } from 'generated/prisma';
 import { BaseRepository } from './base.repository';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class MovieRepository extends BaseRepository<Movie> {

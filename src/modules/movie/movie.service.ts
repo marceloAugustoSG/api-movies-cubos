@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie, Prisma } from 'generated/prisma';
-import { MovieRepository } from '../repositories/movie.repository';
-import { UserRepository } from '../repositories/user.repository';
+import { MovieRepository } from '../../shared/repositories/movie.repository';
+import { UserRepository } from '../../shared/repositories/user.repository';
+import { ERROR_MESSAGES } from '../../shared/constants';
 
 @Injectable()
 export class MovieService {
@@ -15,7 +16,7 @@ export class MovieService {
   async create(createMovieDto: CreateMovieDto): Promise<Movie> {
     const user = await this.userRepository.findById(createMovieDto.userId);
     if (!user) {
-      throw new NotFoundException('Usuário não encontrado');
+      throw new NotFoundException(ERROR_MESSAGES.USER.NOT_FOUND);
     }
 
     const movieData: Prisma.MovieCreateInput = {
@@ -41,7 +42,7 @@ export class MovieService {
   async findOne(id: number): Promise<Movie> {
     const movie = await this.movieRepository.findById(id);
     if (!movie) {
-      throw new NotFoundException('Filme não encontrado');
+      throw new NotFoundException(ERROR_MESSAGES.MOVIE.NOT_FOUND);
     }
     return movie;
   }
@@ -52,18 +53,7 @@ export class MovieService {
 
   async update(id: number, updateMovieDto: UpdateMovieDto): Promise<Movie> {
     await this.findOne(id);
-
-    const updateData: Prisma.MovieUpdateInput = {
-      title: updateMovieDto.title,
-      originalTitle: updateMovieDto.originalTitle,
-      description: updateMovieDto.description,
-      releaseDate: updateMovieDto.releaseDate,
-      duration: updateMovieDto.duration,
-      budget: updateMovieDto.budget,
-      imageUrl: updateMovieDto.imageUrl,
-    };
-
-    return this.movieRepository.update(id, updateData);
+    return this.movieRepository.update(id, updateMovieDto);
   }
 
   async remove(id: number): Promise<Movie> {
