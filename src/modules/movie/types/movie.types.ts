@@ -26,3 +26,13 @@ export interface UpdateMovieResponse extends MovieResponse { }
 export interface FindMovieResponse extends MovieResponse { }
 
 export interface MovieListResponse extends MovieResponse { }
+
+export interface PaginatedMovieResponse {
+    movies: MovieListResponse[];
+    pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+    };
+}

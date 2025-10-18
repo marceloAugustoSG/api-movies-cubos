@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards, Query } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { PaginationDto } from './dto/pagination.dto';
+import { MovieFilterDto } from './dto/movie-filter.dto';
+import { MovieFilterPaginatedDto } from './dto/movie-filter-paginated.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CreateMovieResponse, UpdateMovieResponse, FindMovieResponse, MovieListResponse, MovieResponse } from './types/movie.types';
+import { CreateMovieResponse, UpdateMovieResponse, FindMovieResponse, MovieListResponse, MovieResponse, PaginatedMovieResponse } from './types/movie.types';
 
 @Controller('movies')
 @UseGuards(JwtAuthGuard)
@@ -20,6 +23,25 @@ export class MovieController {
   @HttpCode(HttpStatus.OK)
   findAll(): Promise<MovieListResponse[]> {
     return this.movieService.findAll();
+  }
+
+  @Get('paginated')
+  @HttpCode(HttpStatus.OK)
+  findAllPaginated(@Query() paginationDto: PaginationDto): Promise<PaginatedMovieResponse> {
+    return this.movieService.findAllPaginated(paginationDto.page, paginationDto.limit);
+  }
+
+  @Get('filter')
+  @HttpCode(HttpStatus.OK)
+  findAllWithFilters(@Query() filterDto: MovieFilterDto): Promise<MovieListResponse[]> {
+    return this.movieService.findAllWithFilters(filterDto);
+  }
+
+  @Get('filter/paginated')
+  @HttpCode(HttpStatus.OK)
+  findAllWithFiltersPaginated(@Query() filterPaginatedDto: MovieFilterPaginatedDto): Promise<PaginatedMovieResponse> {
+    const { page, limit, ...filters } = filterPaginatedDto;
+    return this.movieService.findAllWithFiltersPaginated(filters, page, limit);
   }
 
   @Get('user/:userId')

@@ -32,18 +32,18 @@ export class UserService {
     return user ? this.mapUserToResponse(user) : null;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<UpdateUserResponse> {
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<UpdateUserResponse> {
     if (updateUserDto.password) {
       const saltRounds = 10;
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, saltRounds);
     }
     
-    const user = await this.userRepository.update(String(id), updateUserDto);
+    const user = await this.userRepository.update(id, updateUserDto);
     return this.mapUserToResponse(user);
   }
   
-  async remove(id: number): Promise<UserResponse> {
-    const user = await this.userRepository.delete(String(id));
+  async remove(id: string): Promise<UserResponse> {
+    const user = await this.userRepository.delete(id);
     return this.mapUserToResponse(user);
   }
 

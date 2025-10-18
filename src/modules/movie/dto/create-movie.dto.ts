@@ -1,29 +1,29 @@
 import { IsString, IsNumber, IsDateString, Min } from 'class-validator';
 
 export class CreateMovieDto {
-    @IsString()
-    title: string;
+  @IsString()
+  title: string;
 
-    @IsString()
-    originalTitle: string;
+  @IsString()
+  originalTitle: string;
 
-    @IsString()
-    description: string;
+  @IsString()
+  description: string;
 
-    @IsDateString()
-    releaseDate: string;
+  @IsDateString()
+  releaseDate: string;
 
-    @IsNumber()
-    @Min(1)
-    duration: number;
+  @IsNumber()
+  @Min(1)
+  duration: number;
 
-    @IsNumber()
-    @Min(0)
-    budget: number;
+  @IsNumber()
+  @Min(0)
+  budget: number;
 
-    @IsString()
-    imageUrl: string;
+  @IsString()
+  imageUrl: string;
 
-    @IsString()
-    userId: string;
+  @IsString()
+  userId: string;
 }

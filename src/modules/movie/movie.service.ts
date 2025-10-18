@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { MovieFilterDto } from './dto/movie-filter.dto';
 import { Movie, Prisma } from 'generated/prisma';
 import { MovieRepository } from '../../shared/repositories/movie.repository';
 import { UserRepository } from '../../shared/repositories/user.repository';
 import { ERROR_MESSAGES } from '../../shared/constants';
-import { CreateMovieResponse, UpdateMovieResponse, FindMovieResponse, MovieListResponse, MovieResponse } from './types/movie.types';
+import { CreateMovieResponse, UpdateMovieResponse, FindMovieResponse, MovieListResponse, MovieResponse, PaginatedMovieResponse } from './types/movie.types';
 
 @Injectable()
 export class MovieService {
@@ -40,6 +41,43 @@ export class MovieService {
   async findAll(): Promise<MovieListResponse[]> {
     const movies = await this.movieRepository.findMany();
     return movies.map(movie => this.mapMovieToResponse(movie));
+  }
+
+  async findAllPaginated(page: number = 1, limit: number = 10): Promise<PaginatedMovieResponse> {
+    const result = await this.movieRepository.findManyPaginated(page, limit);
+    
+    return {
+      movies: result.movies.map(movie => this.mapMovieToResponse(movie)),
+      pagination: {
+        page,
+        limit,
+        total: result.total,
+        totalPages: result.totalPages
+      }
+    };
+  }
+
+  async findAllWithFilters(filters: MovieFilterDto): Promise<MovieListResponse[]> {
+    const movies = await this.movieRepository.findManyWithFilters(filters);
+    return movies.map(movie => this.mapMovieToResponse(movie));
+  }
+
+  async findAllWithFiltersPaginated(
+    filters: MovieFilterDto, 
+    page: number = 1, 
+    limit: number = 10
+  ): Promise<PaginatedMovieResponse> {
+    const result = await this.movieRepository.findManyWithFiltersPaginated(filters, page, limit);
+    
+    return {
+      movies: result.movies.map(movie => this.mapMovieToResponse(movie)),
+      pagination: {
+        page,
+        limit,
+        total: result.total,
+        totalPages: result.totalPages
+      }
+    };
   }
 
   async findOne(id: number): Promise<FindMovieResponse> {
