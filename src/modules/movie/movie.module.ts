@@ -4,8 +4,10 @@ import { MovieController } from './movie.controller';
 import { PrismaService } from '../../database/prisma.service';
 import { MovieRepository } from '../../shared/repositories/movie.repository';
 import { UserRepository } from '../../shared/repositories/user.repository';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
+  imports: [AuthModule],
   controllers: [MovieController],
   providers: [MovieService, PrismaService, MovieRepository, UserRepository],
 })
