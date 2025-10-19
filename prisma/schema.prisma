@@ -33,7 +33,6 @@ model Movie {
   imageUrl          String?
   slogan            String?
   trailerUrl        String?
-  bannerUrl         String?
   rating            Int?     @default(0)
   voteCount         Int?     @default(0)
   ageRating         String?  

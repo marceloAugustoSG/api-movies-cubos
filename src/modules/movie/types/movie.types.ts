@@ -13,7 +13,6 @@ export interface MovieResponse {
     imageUrl?: string;
     slogan?: string;
     trailerUrl?: string;
-    bannerUrl?: string;
     rating: number;
     voteCount?: number;
     ageRating?: string;

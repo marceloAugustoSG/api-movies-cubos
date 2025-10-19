@@ -56,10 +56,6 @@ export class CreateMovieDto {
   @IsString()
   trailerUrl?: string;
 
-  @IsOptional()
-  @IsString()
-  bannerUrl?: string;
-
   @IsNumber()
   @Min(0)
   @Max(100)
