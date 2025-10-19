@@ -121,6 +121,16 @@ export class MovieRepository extends BaseRepository<Movie> {
       };
     }
 
+    if (filters.releaseDateStart || filters.releaseDateEnd) {
+      where.releaseDate = {};
+      if (filters.releaseDateStart) {
+        where.releaseDate.gte = new Date(filters.releaseDateStart);
+      }
+      if (filters.releaseDateEnd) {
+        where.releaseDate.lte = new Date(filters.releaseDateEnd);
+      }
+    }
+
     if (filters.minDuration || filters.maxDuration) {
       where.duration = {};
       if (filters.minDuration) {
@@ -153,6 +163,12 @@ export class MovieRepository extends BaseRepository<Movie> {
 
     if (filters.userId) {
       where.userId = filters.userId;
+    }
+
+    if (filters.genres) {
+      where.genres = {
+        contains: filters.genres
+      };
     }
 
     return where;

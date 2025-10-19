@@ -22,6 +22,14 @@ export class MovieFilterDto {
   releaseYear?: number;
 
   @IsOptional()
+  @IsString()
+  releaseDateStart?: string;
+
+  @IsOptional()
+  @IsString()
+  releaseDateEnd?: string;
+
+  @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @Min(1)
@@ -62,4 +70,8 @@ export class MovieFilterDto {
   @IsOptional()
   @IsString()
   userId?: string;
+
+  @IsOptional()
+  @IsString()
+  genres?: string;
 }
