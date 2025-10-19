@@ -1,4 +1,13 @@
-import { IsString, IsNumber, IsDateString, Min, Max, IsOptional, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsDateString,
+  Min,
+  Max,
+  IsOptional,
+  IsArray,
+} from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateMovieDto {
   @IsString()
@@ -31,6 +40,12 @@ export class CreateMovieDto {
   profit?: number;
 
   @IsString()
+  @Transform(({ value }) => {
+    if (typeof value === 'object' && value !== null && value.imageUrl) {
+      return value.imageUrl;
+    }
+    return value;
+  })
   imageUrl: string;
 
   @IsOptional()

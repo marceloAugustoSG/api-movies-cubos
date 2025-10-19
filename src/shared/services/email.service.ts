@@ -25,7 +25,6 @@ export class EmailService {
         html: this.getPasswordResetTemplate(resetUrl),
       });
     } catch (error) {
-      console.error('Erro ao enviar email:', error);
       throw new Error('Falha ao enviar email de redefinição de senha');
     }
   }
@@ -47,7 +46,6 @@ export class EmailService {
 
       await this.resend.emails.send(emailData);
     } catch (error) {
-      console.error('Erro ao enviar email:', error);
       throw new Error('Falha ao enviar email');
     }
   }

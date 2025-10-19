@@ -6,14 +6,21 @@ import { Movie, Prisma } from 'generated/prisma';
 import { MovieRepository } from '../../shared/repositories/movie.repository';
 import { UserRepository } from '../../shared/repositories/user.repository';
 import { ERROR_MESSAGES } from '../../shared/constants';
-import { CreateMovieResponse, UpdateMovieResponse, FindMovieResponse, MovieListResponse, MovieResponse, PaginatedMovieResponse } from './types/movie.types';
+import {
+  CreateMovieResponse,
+  UpdateMovieResponse,
+  FindMovieResponse,
+  MovieListResponse,
+  MovieResponse,
+  PaginatedMovieResponse,
+} from './types/movie.types';
 
 @Injectable()
 export class MovieService {
   constructor(
     private readonly movieRepository: MovieRepository,
-    private readonly userRepository: UserRepository
-  ) { }
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async create(createMovieDto: CreateMovieDto): Promise<CreateMovieResponse> {
     const user = await this.userRepository.findById(createMovieDto.userId);

@@ -1,4 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards, Query, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Query,
+  Request,
+} from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
@@ -6,12 +19,19 @@ import { PaginationDto } from './dto/pagination.dto';
 import { MovieFilterDto } from './dto/movie-filter.dto';
 import { MovieFilterPaginatedDto } from './dto/movie-filter-paginated.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CreateMovieResponse, UpdateMovieResponse, FindMovieResponse, MovieListResponse, MovieResponse, PaginatedMovieResponse } from './types/movie.types';
+import {
+  CreateMovieResponse,
+  UpdateMovieResponse,
+  FindMovieResponse,
+  MovieListResponse,
+  MovieResponse,
+  PaginatedMovieResponse,
+} from './types/movie.types';
 
 @Controller('movies')
 @UseGuards(JwtAuthGuard)
 export class MovieController {
-  constructor(private readonly movieService: MovieService) { }
+  constructor(private readonly movieService: MovieService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

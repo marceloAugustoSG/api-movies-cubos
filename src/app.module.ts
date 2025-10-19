@@ -4,13 +4,15 @@ import { UserModule } from './modules/user/user.module';
 import { MovieModule } from './modules/movie/movie.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmailModule } from './modules/email/email.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
     UserModule, 
     MovieModule, 
     AuthModule,
-    EmailModule
+    EmailModule,
+    UploadModule
   ],
   controllers: [AppController],
   providers: [],
