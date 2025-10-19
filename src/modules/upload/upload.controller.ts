@@ -11,10 +11,13 @@ import {
   Body,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { S3Service } from '../../shared/services/s3.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PresignedUrlDto } from './dto/presigned-url.dto';
 
+@ApiTags('upload')
+@ApiBearerAuth('JWT-auth')
 @Controller('upload')
 @UseGuards(JwtAuthGuard)
 export class UploadController {
@@ -23,6 +26,45 @@ export class UploadController {
   @Post('image')
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor('image'))
+  @ApiOperation({ 
+    summary: 'Upload de imagem',
+    description: 'Faz upload de uma imagem para o S3'
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Arquivo de imagem',
+    schema: {
+      type: 'object',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+          description: 'Arquivo de imagem (JPEG, PNG, GIF, WebP) - máximo 5MB'
+        }
+      }
+    }
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Imagem enviada com sucesso',
+    schema: {
+      example: {
+        message: 'Imagem enviada com sucesso',
+        imageUrl: 'https://bucket.s3.amazonaws.com/movies/image.jpg',
+        fileName: 'image.jpg',
+        size: 1024000,
+        uploadedBy: 1
+      }
+    }
+  })
+  @ApiResponse({ 
+    status: 400, 
+    description: 'Arquivo inválido ou muito grande'
+  })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Token JWT inválido ou expirado'
+  })
   async uploadImage(@UploadedFile() file: any, @Request() req) {
     if (!file) {
       throw new BadRequestException('Nenhum arquivo foi enviado');
@@ -55,6 +97,32 @@ export class UploadController {
 
   @Post('presigned-url')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ 
+    summary: 'Gerar URL pré-assinada',
+    description: 'Gera uma URL pré-assinada para upload direto ao S3'
+  })
+  @ApiBody({ type: PresignedUrlDto })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'URL pré-assinada gerada com sucesso',
+    schema: {
+      example: {
+        message: 'URL pré-assinada gerada com sucesso',
+        presignedUrl: 'https://bucket.s3.amazonaws.com/movies/image.jpg?signature=...',
+        fileName: 'image.jpg',
+        contentType: 'image/jpeg',
+        expiresIn: 3600
+      }
+    }
+  })
+  @ApiResponse({ 
+    status: 400, 
+    description: 'Dados inválidos'
+  })
+  @ApiResponse({ 
+    status: 401, 
+    description: 'Token JWT inválido ou expirado'
+  })
   async getPresignedUrl(@Request() req, @Body() presignedUrlDto: PresignedUrlDto) {
     const { fileName, contentType } = presignedUrlDto;
 
