@@ -8,7 +8,18 @@ export interface MovieResponse {
     releaseDate: Date;
     duration: number;
     budget?: number;
+    revenue?: number;
+    profit?: number;
     imageUrl?: string;
+    slogan?: string;
+    trailerUrl?: string;
+    bannerUrl?: string;
+    rating: number;
+    voteCount?: number;
+    ageRating?: string;
+    status?: string;
+    language?: string;
+    genres?: string[];
     createdAt: Date;
     updatedAt: Date;
     userId: string;

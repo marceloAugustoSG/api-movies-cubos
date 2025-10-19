@@ -28,7 +28,18 @@ export class MovieService {
       releaseDate: new Date(createMovieDto.releaseDate),
       duration: createMovieDto.duration,
       budget: createMovieDto.budget,
+      revenue: createMovieDto.revenue,
+      profit: createMovieDto.profit,
       imageUrl: createMovieDto.imageUrl,
+      slogan: createMovieDto.slogan,
+      trailerUrl: createMovieDto.trailerUrl,
+      bannerUrl: createMovieDto.bannerUrl,
+      rating: createMovieDto.rating,
+      voteCount: createMovieDto.voteCount,
+      ageRating: createMovieDto.ageRating,
+      status: createMovieDto.status,
+      language: createMovieDto.language,
+      genres: createMovieDto.genres ? createMovieDto.genres.join(',') : null,
       user: {
         connect: { id: createMovieDto.userId }
       }
@@ -41,6 +52,50 @@ export class MovieService {
   async findAll(): Promise<MovieListResponse[]> {
     const movies = await this.movieRepository.findMany();
     return movies.map(movie => this.mapMovieToResponse(movie));
+  }
+
+  async findByUserId(userId: string): Promise<MovieListResponse[]> {
+    const movies = await this.movieRepository.findByUserId(userId);
+    return movies.map(movie => this.mapMovieToResponse(movie));
+  }
+
+  async findByUserIdPaginated(userId: string, page: number = 1, limit: number = 10): Promise<PaginatedMovieResponse> {
+    const result = await this.movieRepository.findManyByUserIdPaginated(userId, page, limit);
+    return {
+      movies: result.movies.map(movie => this.mapMovieToResponse(movie)),
+      pagination: {
+        page,
+        limit,
+        total: result.total,
+        totalPages: result.totalPages
+      }
+    };
+  }
+
+  async findOneByUser(userId: string, id: number): Promise<FindMovieResponse> {
+    const movie = await this.movieRepository.findByIdAndUserId(id, userId);
+    if (!movie) {
+      throw new NotFoundException(ERROR_MESSAGES.MOVIE.NOT_FOUND);
+    }
+    return this.mapMovieToResponse(movie);
+  }
+
+  async updateByUser(userId: string, id: number, updateMovieDto: UpdateMovieDto): Promise<UpdateMovieResponse> {
+    await this.findOneByUser(userId, id);
+    
+    const updateData = {
+      ...updateMovieDto,
+      genres: updateMovieDto.genres ? updateMovieDto.genres.join(',') : undefined
+    };
+    
+    const movie = await this.movieRepository.update(id, updateData);
+    return this.mapMovieToResponse(movie);
+  }
+
+  async removeByUser(userId: string, id: number): Promise<MovieResponse> {
+    await this.findOneByUser(userId, id);
+    const movie = await this.movieRepository.delete(id);
+    return this.mapMovieToResponse(movie);
   }
 
   async findAllPaginated(page: number = 1, limit: number = 10): Promise<PaginatedMovieResponse> {
@@ -88,14 +143,15 @@ export class MovieService {
     return this.mapMovieToResponse(movie);
   }
 
-  async findByUserId(userId: string): Promise<MovieListResponse[]> {
-    const movies = await this.movieRepository.findByUserId(userId);
-    return movies.map(movie => this.mapMovieToResponse(movie));
-  }
-
   async update(id: number, updateMovieDto: UpdateMovieDto): Promise<UpdateMovieResponse> {
     await this.findOne(id);
-    const movie = await this.movieRepository.update(id, updateMovieDto);
+    
+    const updateData = {
+      ...updateMovieDto,
+      genres: updateMovieDto.genres ? updateMovieDto.genres.join(',') : undefined
+    };
+    
+    const movie = await this.movieRepository.update(id, updateData);
     return this.mapMovieToResponse(movie);
   }
 
@@ -114,7 +170,18 @@ export class MovieService {
       releaseDate: movie.releaseDate,
       duration: movie.duration,
       budget: movie.budget,
+      revenue: movie.revenue,
+      profit: movie.profit,
       imageUrl: movie.imageUrl,
+      slogan: movie.slogan,
+      trailerUrl: movie.trailerUrl,
+      bannerUrl: movie.bannerUrl,
+      rating: movie.rating || 0,
+      voteCount: movie.voteCount || 0,
+      ageRating: movie.ageRating,
+      status: movie.status,
+      language: movie.language,
+      genres: movie.genres ? movie.genres.split(',') : [],
       createdAt: movie.createdAt,
       updatedAt: movie.updatedAt,
       userId: movie.userId,

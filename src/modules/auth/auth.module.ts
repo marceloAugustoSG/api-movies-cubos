@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserRepository } from '../../shared/repositories/user.repository';
 import { PrismaService } from '../../database/prisma.service';
+import { EmailService } from '../../shared/services/email.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
@@ -21,6 +22,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
     AuthService,
     UserRepository,
     PrismaService,
+    EmailService,
     JwtStrategy,
     JwtAuthGuard,
   ],

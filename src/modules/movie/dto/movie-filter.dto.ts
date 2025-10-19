@@ -46,6 +46,20 @@ export class MovieFilterDto {
   maxBudget?: number;
 
   @IsOptional()
+  @Transform(({ value }) => parseInt(value))
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  minRating?: number;
+
+  @IsOptional()
+  @Transform(({ value }) => parseInt(value))
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  maxRating?: number;
+
+  @IsOptional()
   @IsString()
   userId?: string;
 }

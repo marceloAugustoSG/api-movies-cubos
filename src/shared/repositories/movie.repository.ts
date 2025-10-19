@@ -141,6 +141,16 @@ export class MovieRepository extends BaseRepository<Movie> {
       }
     }
 
+    if (filters.minRating || filters.maxRating) {
+      where.rating = {};
+      if (filters.minRating) {
+        where.rating.gte = filters.minRating;
+      }
+      if (filters.maxRating) {
+        where.rating.lte = filters.maxRating;
+      }
+    }
+
     if (filters.userId) {
       where.userId = filters.userId;
     }
@@ -153,6 +163,41 @@ export class MovieRepository extends BaseRepository<Movie> {
       where: { userId },
       include: { user: true },
       orderBy: { createdAt: 'desc' }
+    });
+  }
+
+  async findManyByUserIdPaginated(userId: string, page: number = 1, limit: number = 10): Promise<{ movies: Movie[], total: number, totalPages: number }> {
+    const skip = (page - 1) * limit;
+    
+    const [movies, total] = await Promise.all([
+      this.prisma.movie.findMany({
+        where: { userId },
+        include: { user: true },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit
+      }),
+      this.prisma.movie.count({
+        where: { userId }
+      })
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      movies,
+      total,
+      totalPages
+    };
+  }
+
+  async findByIdAndUserId(id: number, userId: string): Promise<Movie | null> {
+    return this.prisma.movie.findFirst({
+      where: { 
+        id,
+        userId 
+      },
+      include: { user: true }
     });
   }
 

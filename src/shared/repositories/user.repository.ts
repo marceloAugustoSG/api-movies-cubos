@@ -32,6 +32,18 @@ export class UserRepository extends BaseRepository<User> {
     });
   }
 
+  async findByResetToken(token: string): Promise<User | null> {
+    return this.prisma.user.findFirst({
+      where: { 
+        resetPasswordToken: token,
+        resetPasswordExpires: {
+          gt: new Date()
+        }
+      },
+      include: { movies: true }
+    });
+  }
+
   async findMany(): Promise<User[]> {
     return this.prisma.user.findMany({
       include: { movies: true },
