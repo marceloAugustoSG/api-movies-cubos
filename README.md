@@ -1,98 +1,329 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🎬 API Movie Cubos
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Uma API completa para gerenciamento de filmes e usuários, desenvolvida com NestJS, Prisma e PostgreSQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+[![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
-## Description
+## 📋 Índice
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Características](#-características)
+- [Tecnologias](#-tecnologias)
+- [Pré-requisitos](#-pré-requisitos)
+- [Instalação](#-instalação)
+- [Configuração](#-configuração)
+- [Uso](#-uso)
+- [Documentação da API](#-documentação-da-api)
+- [Endpoints](#-endpoints)
+- [Autenticação](#-autenticação)
+- [Deploy](#-deploy)
+- [Contribuição](#-contribuição)
+- [Licença](#-licença)
 
-## Project setup
+## ✨ Características
 
+- 🔐 **Autenticação JWT** completa com registro e login
+- 👥 **Gerenciamento de usuários** com CRUD completo
+- 🎬 **Gerenciamento de filmes** com filtros e paginação
+- 📤 **Upload de imagens** para Amazon S3
+- 📧 **Envio de emails** personalizados via Resend
+- 📚 **Documentação interativa** com Swagger
+- 🔒 **Validação de dados** com class-validator
+- 🌐 **CORS configurado** para desenvolvimento e produção
+- 📱 **Suporte mobile** com logs de debug
+- 🚀 **Pronto para produção** com configurações otimizadas
+
+## 🛠 Tecnologias
+
+### Backend
+- **[NestJS](https://nestjs.com/)** - Framework Node.js
+- **[TypeScript](https://www.typescriptlang.org/)** - Linguagem de programação
+- **[Prisma](https://www.prisma.io/)** - ORM para banco de dados
+- **[PostgreSQL](https://www.postgresql.org/)** - Banco de dados
+- **[JWT](https://jwt.io/)** - Autenticação
+- **[bcrypt](https://www.npmjs.com/package/bcrypt)** - Criptografia de senhas
+
+### Serviços Externos
+- **[Amazon S3](https://aws.amazon.com/s3/)** - Armazenamento de arquivos
+- **[Resend](https://resend.com/)** - Envio de emails
+- **[Supabase](https://supabase.com/)** - Banco de dados em nuvem
+
+### Documentação
+- **[Swagger/OpenAPI](https://swagger.io/)** - Documentação interativa
+- **[class-validator](https://github.com/typestack/class-validator)** - Validação de DTOs
+
+## 📋 Pré-requisitos
+
+- Node.js (v18 ou superior)
+- Yarn ou npm
+- PostgreSQL (local ou Supabase)
+- Conta AWS (para S3)
+- Conta Resend (para emails)
+
+## 🚀 Instalação
+
+1. **Clone o repositório:**
 ```bash
-$ yarn install
+git clone https://github.com/seu-usuario/api-movie-cubos.git
+cd api-movie-cubos
 ```
 
-## Compile and run the project
-
+2. **Instale as dependências:**
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+yarn install
+# ou
+npm install
 ```
 
-## Run tests
-
+3. **Configure as variáveis de ambiente:**
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+cp env.example .env
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+4. **Configure o banco de dados:**
 ```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+# Gerar cliente Prisma
+yarn prisma:generate
+
+# Executar migrações
+yarn prisma:migrate
+
+# (Opcional) Abrir Prisma Studio
+yarn prisma:studio
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## ⚙️ Configuração
 
-## Resources
+### Variáveis de Ambiente
 
-Check out a few resources that may come in handy when working with NestJS:
+Crie um arquivo `.env` na raiz do projeto:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+# Database
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/moviesdb?schema=public"
 
-## Support
+# JWT
+JWT_SECRET="your-super-secret-jwt-key-here"
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Email (Resend)
+RESEND_API_KEY="your-resend-api-key-here"
+FRONTEND_URL="http://localhost:3000"
 
-## Stay in touch
+# AWS S3
+AWS_ACCESS_KEY_ID="your-aws-access-key-id"
+AWS_SECRET_ACCESS_KEY="your-aws-secret-access-key"
+AWS_REGION="us-east-1"
+AWS_S3_BUCKET_NAME="movies-api-images"
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Configuração do Banco de Dados
 
-## License
+1. **Local (PostgreSQL):**
+```bash
+# Instalar PostgreSQL
+# Criar banco de dados
+createdb moviesdb
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# Executar migrações
+yarn prisma:migrate
+```
+
+2. **Supabase (Recomendado para produção):**
+```bash
+# Criar projeto no Supabase
+# Copiar DATABASE_URL
+# Configurar no .env
+```
+
+## 🎯 Uso
+
+### Desenvolvimento
+
+```bash
+# Iniciar em modo desenvolvimento
+yarn start:dev
+
+# Build para produção
+yarn build
+
+# Iniciar em modo produção
+yarn start:prod
+```
+
+### Scripts Disponíveis
+
+```bash
+# Desenvolvimento
+yarn start:dev          # Inicia com hot-reload
+yarn start:debug        # Inicia em modo debug
+
+# Build e Produção
+yarn build              # Compila TypeScript
+yarn start:prod         # Inicia versão compilada
+
+# Banco de Dados
+yarn prisma:generate    # Gera cliente Prisma
+yarn prisma:migrate     # Executa migrações
+yarn prisma:studio      # Abre Prisma Studio
+yarn prisma:push        # Push schema para banco
+
+# Testes
+yarn test               # Executa testes unitários
+yarn test:e2e           # Executa testes e2e
+yarn test:cov           # Executa testes com coverage
+
+# Qualidade de Código
+yarn lint               # Executa ESLint
+yarn format             # Formata código com Prettier
+```
+
+## 📚 Documentação da API
+
+A API possui documentação interativa completa:
+
+- **Swagger UI:** `http://localhost:3000/api/docs`
+- **Documentação Alternativa:** `http://localhost:3000/docs`
+- **Informações da API:** `http://localhost:3000/docs/info`
+
+### Recursos da Documentação
+
+- ✅ **Teste interativo** de todos os endpoints
+- ✅ **Exemplos de requisição** e resposta
+- ✅ **Autenticação JWT** integrada
+- ✅ **Validação de dados** em tempo real
+- ✅ **Códigos de status HTTP** documentados
+
+## 🔗 Endpoints
+
+### 🔐 Autenticação (`/auth`)
+| Método | Endpoint | Descrição | Autenticação |
+|--------|----------|-----------|--------------|
+| POST | `/auth/register` | Registrar novo usuário | ❌ |
+| POST | `/auth/login` | Fazer login | ❌ |
+| POST | `/auth/forgot-password` | Solicitar redefinição de senha | ❌ |
+| POST | `/auth/reset-password` | Redefinir senha | ❌ |
+
+### 👥 Usuários (`/users`)
+| Método | Endpoint | Descrição | Autenticação |
+|--------|----------|-----------|--------------|
+| POST | `/users` | Criar usuário | ❌ |
+| GET | `/users` | Listar usuários | ❌ |
+| GET | `/users/:id` | Buscar usuário por ID | ❌ |
+| PATCH | `/users/:id` | Atualizar usuário | ❌ |
+| DELETE | `/users/:id` | Deletar usuário | ❌ |
+
+### 🎬 Filmes (`/movies`)
+| Método | Endpoint | Descrição | Autenticação |
+|--------|----------|-----------|--------------|
+| POST | `/movies` | Criar filme | ✅ |
+| GET | `/movies` | Listar filmes do usuário | ✅ |
+| GET | `/movies/paginated` | Listar com paginação | ✅ |
+| GET | `/movies/filter` | Filtrar filmes | ✅ |
+| GET | `/movies/filter/paginated` | Filtrar com paginação | ✅ |
+| GET | `/movies/:id` | Buscar filme por ID | ✅ |
+| PATCH | `/movies/:id` | Atualizar filme | ✅ |
+| DELETE | `/movies/:id` | Deletar filme | ✅ |
+
+### 📤 Upload (`/upload`)
+| Método | Endpoint | Descrição | Autenticação |
+|--------|----------|-----------|--------------|
+| POST | `/upload/image` | Upload de imagem | ✅ |
+| POST | `/upload/presigned-url` | Gerar URL pré-assinada | ✅ |
+
+### 📧 Email (`/email`)
+| Método | Endpoint | Descrição | Autenticação |
+|--------|----------|-----------|--------------|
+| POST | `/email/send` | Enviar email personalizado | ✅ |
+| POST | `/email/send-password-reset` | Enviar email de redefinição | ✅ |
+
+## 🔑 Autenticação
+
+A API utiliza **JWT (JSON Web Tokens)** para autenticação.
+
+### Como Autenticar
+
+1. **Fazer login:**
+```bash
+POST /auth/login
+{
+  "email": "usuario@exemplo.com",
+  "password": "senha123"
+}
+```
+
+2. **Usar o token:**
+```bash
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+### Exemplo de Uso
+
+```javascript
+// Login
+const response = await fetch('/auth/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    email: 'usuario@exemplo.com',
+    password: 'senha123'
+  })
+});
+
+const { access_token } = await response.json();
+
+// Usar token em requisições autenticadas
+const movies = await fetch('/movies', {
+  headers: {
+    'Authorization': `Bearer ${access_token}`,
+    'Content-Type': 'application/json',
+  }
+});
+```
+
+
+3. **Build Command:** `yarn install && yarn build`
+4. **Start Command:** `yarn start:prod`
+
+
+
+
+## 🧪 Testes
+
+```bash
+# Testes unitários
+yarn test
+
+```
+
+## 📊 Estrutura do Projeto
+
+```
+src/
+├── modules/
+│   ├── auth/           # Autenticação
+│   ├── user/           # Usuários
+│   ├── movie/          # Filmes
+│   ├── upload/         # Upload de arquivos
+│   └── email/          # Envio de emails
+├── shared/
+│   ├── services/       # Serviços compartilhados
+│   └── repositories/   # Repositórios
+├── database/
+│   └── prisma.service.ts
+├── middleware/
+│   └── mobile-debug.middleware.ts
+├── docs.controller.ts
+├── app.module.ts
+└── main.ts
+```
+
+
+
+
+
+
+🔗 **Live Demo:** [API de filmes ](hhttps://api-movies-cubos.onrender.com)
