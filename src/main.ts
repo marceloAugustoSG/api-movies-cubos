@@ -3,30 +3,68 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-/**
- * Função principal para inicializar a aplicação NestJS
- * Configura CORS, validação global, Swagger e inicia o servidor
- */
 async function bootstrap() {
-  // Criar instância da aplicação NestJS
   const app = await NestFactory.create(AppModule);
 
-  // Configuração CORS para permitir requisições de diferentes origens
-  app.enableCors({
-    origin: true, // Permite todas as origens em desenvolvimento
+  const corsOptions = {
+    origin: (origin: string, callback: Function) => {
+      if (process.env.NODE_ENV !== 'production') {
+        return callback(null, true);
+      }
+      
+      const allowedOrigins = [
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'https://yourdomain.com',
+        'https://www.yourdomain.com',
+      ];
+      
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log(`🚫 CORS bloqueado para origem: ${origin}`);
+        callback(new Error('Não permitido pelo CORS'));
+      }
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true, // Permite cookies e headers de autenticação
+    allowedHeaders: [
+      'Content-Type', 
+      'Authorization', 
+      'X-Requested-With',
+      'Accept',
+      'Origin',
+      'Access-Control-Request-Method',
+      'Access-Control-Request-Headers'
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    preflightContinue: false,
+  };
+  
+  app.enableCors(corsOptions);
+
+  app.use((req: any, res: any, next: any) => {
+    const timestamp = new Date().toISOString();
+    const userAgent = req.headers['user-agent'] || 'Unknown';
+    const origin = req.headers.origin || 'No Origin';
+    
+    console.log(`📱 ${timestamp} - ${req.method} ${req.path} - Origin: ${origin} - User-Agent: ${userAgent.substring(0, 50)}...`);
+    
+    if (req.path === '/auth/login') {
+      console.log(`🔐 Tentativa de login - Origin: ${origin} - IP: ${req.ip}`);
+    }
+    
+    next();
   });
 
-  // Configuração global de validação de dados
   app.useGlobalPipes(new ValidationPipe({
-    whitelist: true, // Remove propriedades não definidas nos DTOs
-    forbidNonWhitelisted: true, // Rejeita requisições com propriedades extras
-    transform: true, // Transforma automaticamente os tipos de dados
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
   }));
 
-  // Configuração da documentação Swagger/OpenAPI
   const config = new DocumentBuilder()
     .setTitle('API Movie Cubos')
     .setDescription('API completa para gerenciamento de filmes e usuários com autenticação JWT, upload de imagens e envio de emails')
@@ -40,7 +78,7 @@ async function bootstrap() {
         description: 'Token JWT para autenticação - obtenha fazendo login em /auth/login',
         in: 'header',
       },
-      'JWT-auth', // Nome da configuração de autenticação
+      'JWT-auth',
     )
     .addTag('auth', 'Endpoints de autenticação - registro, login e recuperação de senha')
     .addTag('users', 'Endpoints de gerenciamento de usuários - CRUD completo')
@@ -49,24 +87,20 @@ async function bootstrap() {
     .addTag('email', 'Endpoints de envio de emails - personalizados e de recuperação')
     .build();
 
-  // Gerar documentação OpenAPI
   const document = SwaggerModule.createDocument(app, config);
   
-  // Configurar Swagger UI - endpoint principal
   SwaggerModule.setup('api/docs', app, document, {
     swaggerOptions: {
-      persistAuthorization: true, // Mantém o token JWT entre sessões
+      persistAuthorization: true,
     },
   });
 
-  // Endpoint alternativo para documentação
   SwaggerModule.setup('docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
     },
   });
 
-  // Iniciar servidor na porta definida nas variáveis de ambiente ou 3000
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
   
@@ -75,5 +109,4 @@ async function bootstrap() {
   console.log(`📖 Documentação alternativa: http://localhost:${port}/docs`);
 }
 
-// Inicializar aplicação
 bootstrap();
